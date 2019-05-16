@@ -1,0 +1,78 @@
+Generators are often not well understood by programmers who are used to normal execution flow of functions and are seeing the yield keyword in Python.
+Before moving on to generators, we need to understand how functions are executed normally.
+Consider a function that gives us the even numbers in given range
+#+BEGIN_SRC python
+def even_numbers(start_number, end_number):
+    # First creating an empty list that will be populated as we iterate till the end_number
+    even_nums = []
+    for i in range(start_number, end_number+1):
+        if i % 2 == 0:
+            # append the number to our list
+            even_nums.append(i)
+    return even_nums
+#+END_SRC
+Above code gives us the required list.
+We can even use list comprehension for this purpose
+#+BEGIN_SRC python
+def even_numbers(start_number, end_number):
+    return [i for i in range(start_number, end_number + 1) if i % 2 == 0]
+#+END_SRC
+The main difference that we see in a generator and a normal function returning a value is the keyword /yield/. So what's the difference?
+
+** The return statement
+Every function performs three actions (in a very informal way):
+- To take inputs
+- Perform operations on those inputs
+- Return a result
+
+When we say 'return a result', what actually happens is that the function, once completed, returns the control of execution to its caller.
+Our previous /even_numbers()/ function can be called as follows
+#+BEGIN_SRC python
+even_nos = even_numbers(5, 10)
+#+END_SRC
+When the program execution reaches this statement, the control is given to the function /even_numbers/ and when the function is done with its work (in this case, creating a list of even numbers), it passes the control back to the caller statement along with the result.
+Short and simple! So what exactly are generators and why do we need them when we get what we want in normal function return statement?
+This has to do with 'storing the entire result in memory and then returning that result'.
+The list that is produced in /even_numbers/ is stored in memory, and only when the function calculates all the elements does it returns that result.
+This produces a problem when the result that we want is too big to fit in memory. What if the range given to /even_numbers/ doesn't fit in the memory?
+Doesn't it sound better if we could produce the numbers one at a time? This is where /yield/ comes into picture
+
+** The yield statement
+Instead of calculating an entire list of even numbers, we calculate the 'next even number' by using /yield/ statement.
+Our function can be modified as:
+#+BEGIN_SRC python
+def even_numbers(start, end):
+    for i in range(start, end + 1):
+        if i % 2 == 0:
+            yield i
+
+>>> even_numbers(5, 15)
+<generator object even_nos at 0x7fec94571bf8>
+#+END_SRC
+You can see now that the function that we wrote isn't an ordinary function, rather it returns a generator object.
+Generator object can be iterated through by using /next()/ method
+#+BEGIN_SRC python
+>>> g = even_numbers(5, 10)
+>>> next(g)
+6
+>>> next(g)
+8
+>>> next(g)
+10
+>>> next(g)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+StopIteration
+#+END_SRC
+You can see that after returning (or /yielding/) all values, when we called next on the generator, it raised the 'StopIteration' exception, which tells the program that generator has no more values to produce.
+We can iterate through the generator using normal for-loop
+#+BEGIN_SRC python
+>>> g = even_numbers(5, 10)
+>>> for i in g:
+...    print(i)
+...
+6
+8
+10
+#+END_SRC
+You can see that the for loop printed all the values (by calling next() implicitly), and when the generator raises 'StopIteration', that's the cue for the loop to stop.
