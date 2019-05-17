@@ -1,0 +1,35 @@
+* Parallel computing
+- Parallel programming is either:
+  - Running code simultaneously on multiple CPUs
+  - Running code on same CPU, and achieving the parallelism by using CPU wasted cycles, that is - while the program is waiting for external resources
+
+* Process vs Threads
+- Process is an instance of the program, and thread is the subprocess spawned by the process
+- e.g.:
+  - When you open Word, you create a process.
+  - When you start typing, the process spawns threads: one to read keystrokes, another to display text, one to autosave your file, and yet another to highlight spelling mistakes.
+  - By spawning multiple threads, Microsoft takes advantage of idle CPU time (waiting for keystrokes or files to load) and makes you more productive
+
+* Parallel programming in python
+- See [[https://docs.python.org/3/library/concurrent.futures.html#module-concurrent.futures][Launching parallel tasks]]
+Parallel processing examples in python
+#+BEGIN_SRC python
+def multithreading(func, args, workers):
+    with ThreadPoolExecutor(workers) as ex:
+        res = ex.map(func, args)
+    return list(res)
+
+def multiprocessing(func, args, workers):
+    with ProcessPoolExecutor(work) as ex:
+        res = ex.map(func, args)
+    return list(res)
+#+END_SRC
+
+- [[https://docs.python.org/3/library/concurrent.futures.html#module-concurrent.futures][concurrent.futures]] is an interface that python provides for asynchronously executing callables
+- concurrent.futures has an abstract class [[https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.Executor][Executor]] that is implemented by subclasses [[https://docs.python.org/3/library/concurrent.futures.html#threadpoolexecutor][ThreadPoolExecutor]] and [[https://docs.python.org/3/library/concurrent.futures.html#processpoolexecutor][ProcessPoolExecutor]]
+
+
+* Resources and further reading
+- Antoine Pitrou suggested the change in GIL in 3.2 implementation. The change was to make the thread holding GIL give up the lock every 5 msec.
+- David Beazley's website: http://www.dabeaz.com/
+- [[https://chriskiehl.com/article/parallelism-in-one-line][Parallelism in one line]]
