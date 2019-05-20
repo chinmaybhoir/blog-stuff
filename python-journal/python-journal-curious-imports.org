@@ -1,3 +1,4 @@
+#+TITLE: Python Journal - The Curious Case of Python Imports
 * The import statement
 Python has a [[https://docs.python.org/3/tutorial/modules.html][module]] system for easier maintenance of large codebases. 
 This enables us to put Python statements and definitions in different files and 'import' them whenever needed in another script.
@@ -81,7 +82,7 @@ But what exactly happens under the hood?
 * Investigating the imports
 We could look into globals(), locals(), and sys.modules to see what exactly Python imports
 
-#+BEGIN_SRC 
+#+BEGIN_SRC python
 from constants import PI
 import sys
 from pprint import pprint
@@ -107,30 +108,27 @@ This gives following output
 
 You can see that sys.modules has an entry for 'constants', so the module is loaded. Why can not we access it then?
 
-* The __import__ function
-Python has a built-in function __import__ that is called whenever the statement import is executed.
+* The =__import__= function
+Python has a built-in function =__import__= that is called whenever the statement import is executed.
 
-Following is taken verbatim from [[https://docs.python.org/3/library/functions.html#__import__][__import__ documentation]]
-========================
+Following is taken verbatim from [[https://docs.python.org/3/library/functions.html#__import__][=__import__= documentation]]
 
-For example, the statement import spam results in bytecode resembling the following code:
-#+BEGIN_SRC 
+/For example, the statement import spam results in bytecode resembling the following code/:
+#+BEGIN_SRC python
 spam = __import__('spam', globals(), locals(), [], 0)
 #+END_SRC
-The statement import spam.ham results in this call:
-#+BEGIN_SRC 
+/The statement import spam.ham results in this call/:
+#+BEGIN_SRC python
 spam = __import__('spam.ham', globals(), locals(), [], 0)
 #+END_SRC
-Note how __import__() returns the toplevel module here because this is the object that is bound to a name by the import statement.
+/Note how/ =__import__= /returns the toplevel module here because this is the object that is bound to a name by the import statement./
 
-On the other hand, the statement from spam.ham import eggs, sausage as saus results in
-#+BEGIN_SRC 
+/On the other hand, the statement from spam.ham import eggs, sausage as saus results in/
+#+BEGIN_SRC python
 _temp = __import__('spam.ham', globals(), locals(), ['eggs', 'sausage'], 0)
 eggs = _temp.eggs
 saus = _temp.sausage
 #+END_SRC
 
-=========================
-
-You can see that the last usecase imports the module in a temporary variable _temp, and the variables (PI/EXP in our usecase) are assigned differently.
-This is the reason we can not access 'constants', or 'EXP' (since it does not appear in the fromlist attribute of __import__)
+You can see that the last usecase imports the module in a temporary variable =_temp=, and the variables (PI/EXP in our usecase) are assigned differently.
+This is the reason we can not access 'constants', or 'EXP' (since it does not appear in the fromlist attribute of =__import__=)

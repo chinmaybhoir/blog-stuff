@@ -1,0 +1,15 @@
+#+TITLE: Miscelleneous concepts
+* Synthetic functions
+#+BEGIN_SRC python
+d = {}
+code = """
+def synthetic_spam(z):
+    return z*z + 1
+"""
+
+exec(code, d)
+
+print(d.keys())
+spam = d['synthetic_spam']
+print(spam(3))
+#+END_SRC

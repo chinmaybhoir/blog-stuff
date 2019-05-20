@@ -1,9 +1,11 @@
+#+TITLE: Python Journal - Generators
 Generators are often not well understood by programmers who are used to normal execution flow of functions and are seeing the yield keyword in Python.
 Before moving on to generators, we need to understand how functions are executed normally.
 Consider a function that gives us the even numbers in given range
 #+BEGIN_SRC python
 def even_numbers(start_number, end_number):
-    # First creating an empty list that will be populated as we iterate till the end_number
+    # First creating an empty list that will be populated 
+      as we iterate till the end_number
     even_nums = []
     for i in range(start_number, end_number+1):
         if i % 2 == 0:
