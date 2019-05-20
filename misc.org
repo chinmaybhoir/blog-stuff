@@ -1,5 +1,5 @@
 #+TITLE: Miscelleneous concepts
-* Synthetic functions
+** Synthetic functions
 #+BEGIN_SRC python
 d = {}
 code = """
