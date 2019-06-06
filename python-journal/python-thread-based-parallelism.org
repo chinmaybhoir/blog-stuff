@@ -1,0 +1,3 @@
+* Thread based parallelism
+Resource: [[https://docs.python.org/3/library/threading.html#module-threading][Python Doc - Thread based parallelism]]
+
